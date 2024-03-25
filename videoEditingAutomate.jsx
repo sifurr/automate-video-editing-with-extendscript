@@ -1,35 +1,17 @@
-//~ var qe = app.enableQE();
-//~ var qeProj = qe.project;
-//~ var qeSource = qe.source;
-//~ var qeSeq = qe.QESequence.name;
-
-
-
-//~ var clipForEffect = qe.project.getActiveSequence().getVideoTrackAt(0).getItemAt(2);
-//~ var transitionToApply = qe.project.getVideoTransitionByName("Dip to Black");
-//~ var item = qe.project.getActiveSequence(0).getVideoTrackAt(0).getItemAt(2);
-//~ item.addTransition(transitionToApply, false, '00:00:03:00');
-
-//~ var item = qe.project.getActiveSequence().getVideoTrackAt(0).getItemAt(2);
-//~ var clipToBeDelete = qe.project.getActiveSequence().getVideoTrackAt(0).getItemAt(2);
-//~ var clipToBeDelete = qe.project.getItemAt(1);
-//~ alert(clipToBeDelete.toString());
-
-
-//~ var clip;
-//~ alert(qeSeq.name);
-
 app.enableQE();
 
-var source_path = "E:\\VideoEditingProject\\saidul\\advertisement\\source\\testVids\\";
+var source_path = "D:\\VideoEditingProject\\saidul\\advertisement\\source\\testVids\\";
+var outputVid = "C:\\Users\\Zihad LK\\Desktop\\Editing\\output";
+var myPreset = "C:\\Users\\Zihad LK\\Documents\\Adobe\\Adobe Media Encoder\\23.0\\Presets\\vid_render_1080_2024.epr";
 var advertisement_start = 0;
 var intro_vid_duration = 15;
-var blog_vid_duration = 254;
+var blog_vid_duration = 584;
 var audio_start = 15;
 var reference_gap = 25;
 var blog_vid_start = intro_vid_duration;
 var outro_vid_start = intro_vid_duration + blog_vid_duration;
 var total_reference = 11;
+var refClipName = "ref";
 
 
 var file_advertisement = source_path + "advertisement.mp4";
@@ -41,9 +23,10 @@ var file_mp3 = source_path + "audio.mp3";
 
 var referenceFiles = [];
 for (var i = 1; i <= total_reference; i++) {
-    var referenceFileName = "reference" + i + ".mp4";
+    var referenceFileName = refClipName + " " + "("+ i + ")" + ".mp4";
     referenceFiles.push(source_path + referenceFileName);
 }
+
 app.project.importFiles(referenceFiles);
 app.project.importFiles([file_advertisement, file_intro, file_blog, file_outro, file_mp3]);
 
@@ -82,9 +65,6 @@ var transitionToApply = qe.project.getVideoTransitionByName("Dip to Black");
 var item = qe.project.getActiveSequence(0).getVideoTrackAt(0).getItemAt(2);
 item.addTransition(transitionToApply, false, '00:00:03:00');
 
-var clipToBeDelete = qe.project.getActiveSequence().getVideoTrackAt(0).getItemAt(2);
-clipToBeDelete.rippleDelete();
-
 
 
 var audioClip = findClipByName("audio.mp3");
@@ -97,7 +77,7 @@ app.project.sequences[0].audioTracks[2].setMute(1);
 app.project.sequences[0].audioTracks[3].setMute(1);
 
 for (var i = 0; i < total_reference; i++) {
-    var referenceName = "reference" + (i + 1) + ".mp4";
+    var referenceName = refClipName + " " + "(" + (i + 1) + ")" + ".mp4";
     var referenceClip = findClipByName(referenceName);
     if (referenceClip) {
         var counter = reference_gap * (i + 1);
@@ -117,59 +97,15 @@ function findClipByName(name) {
 }
 
 
-var addTime = new Time();
-var refTime = new Time();
-var introTime = new Time();
-var blogTime = new Time();
-var outroTime = new Time();
-var audioTime = new Time();
-
-var videoTracks = sequence.videoTracks;
-var audioTracks = sequence.audioTracks;
-var firstVideoTrack = videoTracks[0];
-
-var allClipsFromFirstVideoTracks = firstVideoTrack.clips;
-// var adVideoClip = allClipsFromFirstVideoTracks[0];
-// var refVideoClip = allClipsFromFirstVideoTracks[0];
-var introVideoClip = allClipsFromFirstVideoTracks[0];
-var blogVideoClip = allClipsFromFirstVideoTracks[1];
-var outroVideoClip = allClipsFromFirstVideoTracks[2];
-
-// alert(introVideoClip.name);
-
-
-//~ alert(thisClip.duration.seconds.toString ());
-// alert(thisClip.start.seconds.toString ());
-//~ alert(thisClip.end.seconds.toString ());
-//~ alert(thisClip.inPoint.seconds.toString ());
-//~ alert(thisClip.outPoint.seconds.toString ());
-// blogTime.seconds = 25;
-// thisClip.start = blogTime;
-
-var time = new Time();
-// var introVideoClipDuration = introVideoClip.duration.seconds;
-blogVideoClip.start = 10;
-blogVideoClip.end = 100;
-// blogVideoClip.end = 100;
-
-// var blogVideoClipDuration = blogVideoClip.duration.seconds;
+var seq = project.activeSequence;
+app.encoder.launchEncoder();
+app.encoder.encodeSequence(seq, outputVid, myPreset, 0, 1);
+app.encoder.startBatch();
 
 
 
 
 
-
-
-
-
-
-
-// var seq = project.activeSequence;
-// app.encoder.launchEncoder();
-// var outputVid = "C:\\Users\\Video Editor R\\Desktop\\VidOut\\vid1.mp4";
-// var myPreset = "C:\\Users\\Video Editor R\\Documents\\Adobe\\Adobe Media Encoder\\15.0\\Presets\\vid_render_1080_2024.epr";
-// app.encoder.encodeSequence(seq, outputVid, myPreset, 0, 1);
-// app.encoder.startBatch();
 
 
 
